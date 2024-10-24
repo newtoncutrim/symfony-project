@@ -32,11 +32,18 @@ class Group
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'groupId')]
+    private Collection $no;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
+        $this->no = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,6 +113,36 @@ class Group
     public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getNo(): Collection
+    {
+        return $this->no;
+    }
+
+    public function addNo(User $no): static
+    {
+        if (!$this->no->contains($no)) {
+            $this->no->add($no);
+            $no->setGroupId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNo(User $no): static
+    {
+        if ($this->no->removeElement($no)) {
+            // set the owning side to null (unless already changed)
+            if ($no->getGroupId() === $this) {
+                $no->setGroupId(null);
+            }
+        }
 
         return $this;
     }
