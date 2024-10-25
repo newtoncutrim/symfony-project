@@ -31,12 +31,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'no')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Group $groupId = null;
-
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $fullName = null;
 
     public function getId(): ?int
     {
@@ -113,26 +109,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getGroupId(): ?Group
+    public function getFullName(): ?string
     {
-        return $this->groupId;
+        return $this->fullName;
     }
 
-    public function setGroupId(?Group $groupId): static
+    public function setFullName(string $fullName): static
     {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
+        $this->fullName = $fullName;
 
         return $this;
     }
